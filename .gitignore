@@ -1,0 +1,16 @@
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.run.xml
+*.bcf
+*-blx.bib
+.DS_Store
+Thumbs.db
+*.swp
+*~
