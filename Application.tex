@@ -13,6 +13,8 @@
 \usepackage{xcolor}
 \usepackage{setspace}
 \usepackage[round]{natbib}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, bending}
 
 \hypersetup{colorlinks=true, linkcolor=blue!60!black, citecolor=blue!60!black, urlcolor=blue!60!black}
 
@@ -56,8 +58,51 @@ To address potential residual confounding by smoking intensity---particularly re
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.7\textwidth]{figures/fig_dag.png}
-\caption{Directed acyclic graph for the Strong Heart Study application.}
+\begin{tikzpicture}[
+    node distance=1.6cm and 1.8cm,
+    every node/.style={font=\large},
+    arr/.style={-{Stealth[length=6pt]}, thick}
+]
+
+% Nodes
+\node (A0) {$A_0$};
+\node (A1) [right=of A0] {$A_1$};
+\node (A2) [right=of A1] {$A_2$};
+\node (Y)  [right=of A2] {$Y$};
+
+\node (C0) [below=of A0] {$C_0$};
+\node (L1) [below=of A1] {$L_1$};
+\node (L2) [below=of A2] {$L_2$};
+
+% Straight edges: top row
+\draw[arr] (A0) -- (A1);
+\draw[arr] (A1) -- (A2);
+\draw[arr] (A2) -- (Y);
+
+% Straight edges: bottom row
+\draw[arr] (C0) -- (L1);
+\draw[arr] (L1) -- (L2);
+
+% Vertical edges
+\draw[arr] (C0) -- (A0);
+\draw[arr] (L1) -- (A1);
+\draw[arr] (L2) -- (A2);
+
+% Diagonal: A_t -> L_{t+1}
+\draw[arr] (A0) -- (L1);
+\draw[arr] (A1) -- (L2);
+
+% Curved arrows to Y (over the top)
+\draw[arr, bend left=35]  (A0) to (Y);
+\draw[arr, bend left=20]  (A1) to (Y);
+
+% Curved arrows to Y (under, from bottom nodes)
+\draw[arr, bend right=40] (C0) to (Y);
+\draw[arr, bend right=30] (L1) to (Y);
+\draw[arr, bend right=20] (L2) to (Y);
+
+\end{tikzpicture}
+\caption{Directed acyclic graph showing time-varying exposures ($A_t$), time-varying confounders ($L_t$), baseline covariates ($C_0$), and outcome ($Y$) at 3 visits.}
 \label{fig:dag}
 \end{figure}
 
