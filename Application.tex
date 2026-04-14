@@ -1,0 +1,96 @@
+\documentclass[11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{setspace}
+
+\hypersetup{colorlinks=true, linkcolor=blue!60!black, citecolor=blue!60!black, urlcolor=blue!60!black}
+
+\onehalfspacing
+\pagestyle{plain}
+
+\begin{document}
+
+\subsection*{Study population and exposures}
+
+We applied g-BKMR to data from the Strong Heart Study (SHS), a prospective cohort of American Indian adults with low to moderate exposure to metals and a high burden of cardiometabolic disease. The analytic sample consisted of 679 participants with complete urinary metal measurements at three study visits (Visits 1--3) and fasting blood glucose measured at Visit 3. Six urinary metals were considered: selenium (Se), cadmium (Cd), molybdenum (Mo), tungsten (W), arsenic (As), and zinc (Zn), all standardised to urinary creatinine and log-transformed prior to analysis. The mixture comprised 18 exposure variables (six metals $\times$ three visits).
+
+The outcome was log-transformed fasting blood glucose at Visit~3 (motivated by right-skewed distributions; skewness $1.8$--$2.1$; see Supplementary Figure~1). Time-varying confounders included waist circumference and fasting glucose measured at Visits 1 and 2, modeled as time-dependent covariates affected by prior exposure. Baseline covariates included age, sex, body mass index, study centre, smoking status (current/former/never), and baseline kidney function (CKD-EPI eGFR). Missing values were handled by multiple imputation ($m = 5$, predictive mean matching). The directed acyclic graph encoding the assumed causal structure is shown in Figure~\ref{fig:dag}; the cross-timepoint correlation matrix is shown in Figure~\ref{fig:corr}.
+
+\subsection*{Model specification and estimation}
+
+We fit g-BKMR with component-wise variable selection. For each multiply imputed dataset, the BKMR mediator and outcome models were fit using $24{,}000$ MCMC iterations with the final $2{,}000$ retained for posterior summaries (every 50th draw). We targeted two estimands: (i) the joint mixture causal effect, defined as the average causal effect of jointly shifting all 18 metal-timepoint exposures from their 25th percentile (reference) to a target percentile $q \in \{0.30, 0.35, \ldots, 0.90\}$, and (ii) single-variable causal effects, defined as the effect of shifting one metal at one visit from its 25th to 75th percentile while holding all other exposures at their 50th percentile. Posterior means and 95\% credible intervals (CrIs) were obtained by pooling MCMC draws across the five imputed datasets.
+
+\subsection*{Joint mixture effect}
+
+The joint mixture causal effect on log fasting glucose followed a positive, approximately monotonic dose-response (Figure~\ref{fig:dr-joint}). The 95\% credible interval excluded zero above approximately the 45th percentile, with the magnitude of the effect increasing through the upper end of the exposure distribution. At the 75th vs.\ 25th percentile contrast, the average causal effect was $1.01$ standardised units of log glucose (95\% CrI: $0.72$, $1.33$).
+
+\subsection*{Single-variable effects}
+
+Examining each metal-timepoint individually (Figure~\ref{fig:forest}), zinc was the dominant contributor to the joint mixture signal: the IQR causal effect of Zn was $0.51$ SD at Visit~1 (95\% CrI: $0.28$, $0.75$), $0.26$ SD at Visit~2 ($0.03$, $0.51$), and $0.36$ SD at Visit~3 ($0.20$, $0.55$). All three Zn-timepoint effects were credibly distinct from zero. Selenium at Visit~1 also showed a positive association ($0.19$ SD; 95\% CrI: $-0.01$, $0.36$; posterior probability of a positive effect: $0.97$). Cadmium at Visit~1 showed an inverse association ($-0.21$ SD; 95\% CrI: $-0.37$, $-0.05$). The remaining metal-timepoints (Mo, W, As, and the later visits of Se and Cd) had effect estimates with credible intervals overlapping zero. Per-metal dose-response curves are shown in Supplementary Figure~2.
+
+\subsection*{Sensitivity to baseline diabetes status}
+
+Because metals may differentially affect glucose metabolism in individuals with established diabetes, we conducted a sensitivity analysis excluding the 265 participants with baseline diabetes (WHO clinical definition; analytic sample $n = 414$). In this subsample, the joint mixture dose-response was substantially attenuated, with the 95\% credible interval covering zero across most quantile contrasts (Figure~\ref{fig:dr-compare}). Single-variable effects were also markedly reduced (Supplementary Figure~3): Zn(V1) decreased from $0.51$ to $0.01$ SD, Cd(V1) reversed sign and became non-significant, and most other estimates moved toward the null. Two findings remained robust: Se(V1) remained positive and credibly above zero ($0.07$ SD; 95\% CrI: $0.004$, $0.15$), and Zn(V3) retained a borderline positive signal ($0.14$ SD; 95\% CrI: $0.00$, $0.35$).
+
+\subsection*{Sensitivity to smoking intensity}
+
+To address potential residual confounding by smoking intensity---particularly relevant to the inverse Cd(V1) finding---we additionally adjusted for baseline pack-years alongside the categorical smoking-status variable. For never-smokers, pack-years was set to zero prior to multiple imputation. All findings were robust to this adjustment (Supplementary Figures~5--7): the joint dose-response at the 75th vs.\ 25th percentile was $1.06$ SD (95\% CrI: $0.80$, $1.39$), compared with $1.01$ ($0.72$, $1.33$) in the main analysis. Notably, the inverse Cd(V1) effect was essentially unchanged ($-0.22$ SD; 95\% CrI: $-0.35$, $-0.10$), indicating that this association is not explained by smoking intensity alone.
+
+% ============================================================================
+% FIGURES
+% ============================================================================
+\clearpage
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\textwidth]{figures/fig_dag.png}
+\caption{Directed acyclic graph for the Strong Heart Study application.}
+\label{fig:dag}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_cross_timepoint_corr_matrix.png}
+\caption{Spearman correlation matrix of the 18 metal-timepoint exposures (six metals $\times$ three visits).}
+\label{fig:corr}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_dr_full.png}
+\caption{Joint causal dose-response of the metal mixture on log fasting glucose, full sample ($n = 679$). Reference: 25th percentile. Shaded band: 95\% credible interval.}
+\label{fig:dr-joint}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_forest_full.png}
+\caption{Single-variable causal effects (IQR shift, 25th to 75th percentile). Bars: 95\% credible intervals. Full sample, $n = 679$.}
+\label{fig:forest}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\begin{subfigure}{0.48\textwidth}
+\includegraphics[width=\textwidth]{figures/fig_dr_full.png}
+\caption{Full sample ($n = 679$)}
+\end{subfigure}\hfill
+\begin{subfigure}{0.48\textwidth}
+\includegraphics[width=\textwidth]{figures/fig_dr_nodm.png}
+\caption{Excluding baseline diabetes ($n = 414$)}
+\end{subfigure}
+\caption{Sensitivity: joint dose-response in full sample (left) vs.\ excluding baseline diabetes (right).}
+\label{fig:dr-compare}
+\end{figure}
+
+\end{document}
