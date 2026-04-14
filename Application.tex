@@ -12,6 +12,7 @@
 \usepackage{hyperref}
 \usepackage{xcolor}
 \usepackage{setspace}
+\usepackage[round]{natbib}
 
 \hypersetup{colorlinks=true, linkcolor=blue!60!black, citecolor=blue!60!black, urlcolor=blue!60!black}
 
@@ -22,13 +23,13 @@
 
 \subsection*{Study population and exposures}
 
-We applied g-BKMR to data from the Strong Heart Study (SHS), a prospective cohort of American Indian adults with low to moderate exposure to metals and a high burden of cardiometabolic disease. The analytic sample consisted of 679 participants with complete urinary metal measurements at three study visits (Visits 1--3) and fasting blood glucose measured at Visit 3. Six urinary metals were considered: selenium (Se), cadmium (Cd), molybdenum (Mo), tungsten (W), arsenic (As), and zinc (Zn), all standardised to urinary creatinine and log-transformed prior to analysis. The mixture comprised 18 exposure variables (six metals $\times$ three visits).
+We applied g-BKMR \citep{chai_gbkmr} to data from the Strong Heart Study \citep[SHS;][]{shs_lee_1990}, a prospective cohort of American Indian adults with low to moderate exposure to metals and a high burden of cardiometabolic disease. The analytic sample consisted of 679 participants with complete urinary metal measurements at three study visits (Visits 1--3) and fasting blood glucose measured at Visit 3. Six urinary metals were considered: selenium (Se), cadmium (Cd), molybdenum (Mo), tungsten (W), arsenic (As), and zinc (Zn), all standardised to urinary creatinine and log-transformed prior to analysis. The mixture comprised 18 exposure variables (six metals $\times$ three visits).
 
 The outcome was log-transformed fasting blood glucose at Visit~3 (motivated by right-skewed distributions; skewness $1.8$--$2.1$; see Supplementary Figure~1). Time-varying confounders included waist circumference and fasting glucose measured at Visits 1 and 2, modeled as time-dependent covariates affected by prior exposure. Baseline covariates included age, sex, body mass index, study centre, smoking status (current/former/never), and baseline kidney function (CKD-EPI eGFR). Missing values were handled by multiple imputation ($m = 5$, predictive mean matching). The directed acyclic graph encoding the assumed causal structure is shown in Figure~\ref{fig:dag}; the cross-timepoint correlation matrix is shown in Figure~\ref{fig:corr}.
 
 \subsection*{Model specification and estimation}
 
-We fit g-BKMR with component-wise variable selection. For each multiply imputed dataset, the BKMR mediator and outcome models were fit using $24{,}000$ MCMC iterations with the final $2{,}000$ retained for posterior summaries (every 50th draw). We targeted two estimands: (i) the joint mixture causal effect, defined as the average causal effect of jointly shifting all 18 metal-timepoint exposures from their 25th percentile (reference) to a target percentile $q \in \{0.30, 0.35, \ldots, 0.90\}$, and (ii) single-variable causal effects, defined as the effect of shifting one metal at one visit from its 25th to 75th percentile while holding all other exposures at their 50th percentile. Posterior means and 95\% credible intervals (CrIs) were obtained by pooling MCMC draws across the five imputed datasets.
+We fit g-BKMR with component-wise variable selection \citep{bobb_bkmr_2015}. For each multiply imputed dataset, the BKMR mediator and outcome models were fit using $24{,}000$ MCMC iterations with the final $2{,}000$ retained for posterior summaries (every 50th draw). We targeted two estimands: (i) the joint mixture causal effect, defined as the average causal effect of jointly shifting all 18 metal-timepoint exposures from their 25th percentile (reference) to a target percentile $q \in \{0.30, 0.35, \ldots, 0.90\}$, and (ii) single-variable causal effects, defined as the effect of shifting one metal at one visit from its 25th to 75th percentile while holding all other exposures at their 50th percentile. Posterior means and 95\% credible intervals (CrIs) were obtained by pooling MCMC draws across the five imputed datasets.
 
 \subsection*{Joint mixture effect}
 
@@ -92,5 +93,12 @@ To address potential residual confounding by smoking intensity---particularly re
 \caption{Sensitivity: joint dose-response in full sample (left) vs.\ excluding baseline diabetes (right).}
 \label{fig:dr-compare}
 \end{figure}
+
+% ============================================================================
+% REFERENCES
+% ============================================================================
+\clearpage
+\bibliographystyle{plainnat}
+\bibliography{references}
 
 \end{document}
