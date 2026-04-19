@@ -1,90 +1,174 @@
 % ============================================================================
-% Methods (from Arce's gBKMR_Nature.docx)
-% NOTE: Formulas were stripped during docx→text conversion. TODO markers
-% below indicate places to paste the LaTeX formulas from Zilan's original
-% .tex file (statistics in medicine draft / dissertation).
+% Methods
+% Text from Arce's gBKMR_Nature.docx; formulas transcribed from Zilan Chai's
+% draft PDF (gBKMR_draft.pdf) since no .tex source was available.
 % ============================================================================
 
 \section*{Methods}
 
-\subsection*{Identifiability assumptions and estimation}
+\subsection*{Causal estimands}
+
+\subsubsection*{Static intervention}
 
 We consider the setting in which $n$ subjects, labelled $i = 1, \ldots, n$, enter a study at baseline (time $t = 0$) and are exposed to $A_{t,i} = A_{0,i}$. In a clinical trial, the value of $A_{0,i}$ is determined by the study protocol, usually at random. In an observational study, $A_{0,i}$ is observed and recorded. A collection of covariates, $C_{0,i}$, are also measured at baseline. At the subsequent follow-up visits, the time-varying confounders $L_{t,i}$ and treatment $A_{t,i}$ are recorded, $t = 1, \ldots, T$. An outcome $Y_i$ is observed for each subject, measured at the final visit $T$. $Y_i$ can be continuous or binary.
 
-Along with the observed outcome $Y_i$ for each subject, for each possible realization of the treatment history $\mathbf{a} \in \mathcal{A}$, we also define $Y_i^{\mathbf{a}}$, the potential outcome that would have been observed had the subject, possibly contrary to fact, received treatment history $\mathbf{a}$. In a simple setting with 3 visits, we assume the Directed Acyclic Graph (DAG) in Figure~\ref{fig:dag}. Under a static, fixed treatment regime, the overall causal effect per one interquartile range increase in all exposures (i.e.\ changing from the 25th percentile to the 75th percentile) can be defined as:
+Along with the \emph{observed outcome} $Y_i$ for each subject, for each possible realization of the treatment history $\bar{\mathbf{a}} \in \bar{\mathcal{A}}$, we also define $Y_i^{\bar{\mathbf{a}}}$, the \emph{potential outcome} that would have been observed had the subject, possibly contrary to fact, received treatment history $\bar{\mathbf{a}}$.
 
-% TODO: paste ACE equation from Zilan's .tex
-% ACE_{a,a*} = E[Y^{A_0=a_0*, A_1=a_1*, A_2=a_2*}] - E[Y^{A_0=a_0, A_1=a1, A_2=a_2}]
+In a simple setting with 3 visits, assume the DAG in Figure~\ref{fig:dag}. Under a static, fixed treatment regime, the overall causal effect of the exposures changing from the $25^{\text{th}}$ percentile to the $75^{\text{th}}$ percentile can be defined as:
+\begin{equation*}
+    \text{ACE} = E\!\left[Y^{A_0 = a_0^*,\, A_1 = a_1^*,\, A_2 = a_2^*}\right] - E\!\left[Y^{A_0 = a_0,\, A_1 = a_1,\, A_2 = a_2}\right],
+\end{equation*}
+where $a_0, a_1, a_2$ are the $25^{\text{th}}$ percentile of the exposures and $a_0^*, a_1^*, a_2^*$ are the $75^{\text{th}}$ percentile of the exposures.
 
-Where $a_0, a_1, a_2$ are the 25th percentile of the exposures, and $a_0^*, a_1^*, a_2^*$ are the 75th percentile of the exposures. In addition to estimating the effect of the mixture per one interquartile range increase (or per any comparison we choose), we could also estimate the effect of a single exposure of the mixture across time points.
+\subsubsection*{Stochastic intervention}
 
-The basic idea of the g-formula is standardization, a common approach to estimating the expected value of $Y^{\mathbf{a}}$ in the population. It can be illustrated in a simple time-fixed confounding example with baseline confounders $C_0$ where the change in the observed mean of the outcome under two different exposure levels is standardized over the observed values $c_0$ of $C_0$.
+We are also interested in the change in the mean of the outcome for the change of the distributions of the exposures. The Average Causal Effect under a stochastic intervention is defined as
+\begin{equation*}
+    \text{ACE} = E\!\left[Y^{g^*(a_0, a_1, a_2)}\right] - E\!\left[Y^{g(a_0, a_1, a_2)}\right],
+\end{equation*}
+where $g$ and $g^*$ are two distributions of the exposures.
 
-% TODO: paste equation E[Y^a] = sum_{c0} E[Y|A=a, C_0=c_0] P(C_0=c_0)
+In addition to estimating the effect of the metal mixture changing from the $25^{\text{th}}$ percentile to the $75^{\text{th}}$ percentile, we could also estimate the effect of a single metal of the mixture across time points. In addition, we could also be estimating interaction effects.
 
-where the sum is over all possible values $c_0$ of $C_0$. Following the DAG in Figure~\ref{fig:dag}, the following identifiability assumptions are required for the g-formula to be a valid estimator for the average causal effect:
+\subsection*{g-formula}
 
-\paragraph{Consistency:}
-% TODO: paste consistency equation
+The basic idea of the g-formula is standardization, a common approach to estimating the expected value of $Y^{\bar{\mathbf{a}}}$ in the population.\cite{robins_gformula_1986} It can be illustrated in a simple time-fixed confounding example with baseline confounders $C_0$ where the change in the observed mean of the outcome under two different exposure levels is standardized over the observed values $c_0$ of $C_0$:
+\begin{equation*}
+    E\!\left(Y^{\bar{\mathbf{a}}}\right) = \sum_{C_0} E\!\left(Y \mid \bar{A} = \bar{\mathbf{a}},\, C_0 = c_0\right) P(C_0 = c_0),
+\end{equation*}
+where the sum is over all possible values $c_0$ of $C_0$. The g-formula is a valid estimator for the average causal effect under several identification assumptions.
 
-\paragraph{Exchangeability:}
-% TODO: paste sequential exchangeability equations (3 conditions)
+Using the DAG in Figure~\ref{fig:dag}, we now give three identifying assumptions.
 
-\paragraph{Positivity:}
-% TODO: paste positivity equation
+\paragraph{1. Consistency:}
+\begin{equation*}
+    E[Y \mid A_0 = a_0, A_1 = a_1, A_2 = a_2] = E\!\left[Y^{a_0, a_1, a_2} \,\middle|\, A_0 = a_0, A_1 = a_1, A_2 = a_2\right].
+\end{equation*}
+
+\paragraph{2. Exchangeability:}
+\begin{align*}
+    Y^{a_0, a_1, a_2} &\independent A_0 \mid C_0, \\
+    Y^{a_0, a_1, a_2} &\independent A_1 \mid C_0, A_0, L_1, \\
+    Y^{a_0, a_1, a_2} &\independent A_2 \mid C_0, A_0, L_1, A_1, L_2.
+\end{align*}
+
+\paragraph{3. Positivity:}
+\begin{equation*}
+    \Pr(a_t \mid \bar{a}_{t-1}, \bar{l}_t, c_0) > 0 \quad \text{for all } t \text{ and all values of } l, c_0 \text{ with } \Pr(\bar{L} = \bar{l}, C_0 = c_0) \neq 0.
+\end{equation*}
 
 The general expression of the g-formula for a static fixed intervention when the identifiability assumptions hold is:
+\begin{equation}
+    E\!\left[Y^{\bar{\mathbf{a}}}\right] = \sum_{\bar{l}} E\!\left(Y \mid \bar{A} = \bar{\mathbf{a}},\, \bar{L} = \bar{l},\, C_0 = c_0\right) \prod_{t=0}^{T} f\!\left(l_t \mid \bar{a}_{t-1}, \bar{l}_{t-1}\right) f(c_0).
+    \label{eq:gformula}
+\end{equation}
 
-% TODO: paste full g-formula expression
+The positivity assumption is a crucial assumption in the causal inference literature that states that every individual in the population has a non-zero probability of receiving any level of exposure. In the case of multiple continuous exposures, the violation of this assumption is a common issue because the probability of receiving each exposure level may become very low for certain individuals. The violation of the positivity assumption could lead to an underestimation of the causal effects of the exposure on the outcome. However, for the stochastic intervention approach, the positivity assumption is more likely to be met because this approach uses a simulated intervention that randomizes the exposure distribution, which can be defined ensuring that each individual has a non-zero probability of receiving each exposure level. Therefore, the stochastic intervention approach is a valuable tool for analyzing the causal effects of multiple continuous exposures.
+
+For a stochastic intervention, let $g_0(a \mid C, L) \equiv P_0(A = a \mid W), \, a \in \mathcal{A}$ denote the conditional distribution of treatment variable $A$ given covariates under the observed data distribution $P_0$. The positivity assumption needed for the identification of the average treatment effect is given by:
+\begin{equation*}
+    \inf_{a \in \mathcal{A}} g_0(a \mid C, L) > 0, \quad \text{a.e.}
+\end{equation*}
 
 \subsection*{Bayesian Kernel Machine Regression}
 
-We first review Kernel Machine Regression (KMR) as a framework for estimating the effect of a complex mixture when only a single time point of exposure is measured. For each subject $i = 1, \ldots, n$, we assume:
+We first review Kernel Machine Regression (KMR) as a framework for estimating the effect of a complex mixture when only a single time point of exposure is measured. For each subject $i = 1, \ldots, n$, we assume
+\begin{equation}
+    Y_i = h(\mathbf{a}_i) + \mathbf{c}_i^\top \boldsymbol{\beta} + \epsilon_i,
+    \label{eq:kmr}
+\end{equation}
+where $\mathbf{a}_i = (a_{i1}, \ldots, a_{iM})^\top$ is a vector of $M$ exposure variables. Liu et al.\ showed that model~\eqref{eq:kmr} can be expressed as the mixed model
+\begin{equation}
+\begin{aligned}
+    y_i &\sim N\!\left(h_i + \mathbf{c}_i^\top \boldsymbol{\beta}, \sigma^2\right), \\
+    \mathbf{h} &\equiv (h_1, \ldots, h_n)^\top \sim N(\mathbf{0}, \tau \mathbf{K}),
+\end{aligned}
+\label{eq:kmr_mixed}
+\end{equation}
+where $\mathbf{K}$ is the kernel matrix with $(i, j)$-element $K(\mathbf{a}_i, \mathbf{a}_j)$.
 
-% TODO: paste Y_i = h(a_i) + c_i^T beta + epsilon_i
+There are different choices of the kernel. We focus on the Gaussian kernel, which flexibly captures a wide range of underlying functional forms for $h(\cdot)$, although the methods are applicable to a broad choice of kernels. Under model~\eqref{eq:kmr_mixed}, we assume
+\begin{equation*}
+    \operatorname{cor}(h_i, h_j) = \exp\!\left\{ -\frac{1}{\rho} \sum_{m=1}^{M} (a_{im} - a_{jm})^2 \right\},
+\end{equation*}
+where $\rho$ is a tuning parameter that regulates the smoothness of the dose-response function. This assumption implies that two subjects with similar exposures will have more similar risks (i.e.\ if $\mathbf{a}_i$ is close to $\mathbf{a}_j$, then $h_i$ will be close to $h_j$).
 
-where $a_i = (a_{i1}, \ldots, a_{iM})^T$ is a vector of $M$ exposure variables. Liu et al.\ showed that this model can be expressed as the mixed model:
+Bobb et al.\cite{bobb_bkmr_2015} presented the Bayesian Kernel Machine Regression (BKMR) as a framework to estimate the effect of a complex mixture on a health outcome. To fit~\eqref{eq:kmr}, we assume a prior on the coefficients for the confounding variables, $\boldsymbol{\beta} \sim 1$ (flat prior), and $\sigma^{-2} \sim \text{Gamma}(a_\sigma, b_\sigma)$, where we set $a_\sigma = b_\sigma = 0.001$. We can parameterize BKMR by $\lambda = \tau \sigma^{-2}$, and we assume a Gamma prior distribution for the variance component of $\lambda$. For the smoothness parameter $\rho$, we assume $\rho \sim \text{Unif}(a, b)$ with $a = 0$ and $b = 100$. For additional details regarding BKMR and prior specifications, see Bobb et al.\cite{bobb_bkmr_2015,bobb_bkmr_2018}
 
-% TODO: paste y_i ~ N(h_i + c_i^T beta, sigma^2) and h ~ N(0, tau K)
+\subsection*{Component-wise variable selection}
 
-where $K$ is the kernel matrix, which has $(i, j)$ element $K(a_i, a_j)$.
+BKMR allows for variable selection within a Bayesian paradigm. Define the augmented Gaussian kernel function as
+\begin{equation*}
+    K(\mathbf{a}, \mathbf{a}'; \mathbf{r}) = \exp\!\left\{ -\sum_{m=1}^{M} r_m (a_m - a_m')^2 \right\},
+\end{equation*}
+where $\mathbf{r} = (r_1, \ldots, r_M)^\top$, and define $\mathbf{K}_{\mathbf{a}, \mathbf{r}}$ to be the $n \times n$ matrix with $(i, j)$-element equal to $K(\mathbf{a}_i, \mathbf{a}_j; \mathbf{r})$. Assuming a ``slab-and-spike'' prior on the auxiliary parameters,
+\begin{align*}
+    r_m \mid \delta_m &\sim \delta_m f_1(r_m) + (1 - \delta_m) P_0, \quad m = 1, \ldots, M, \\
+    \delta_m &\sim \text{Bernoulli}(\pi),
+\end{align*}
+where $f_1(\cdot)$ is a pdf with support on $\mathbb{R}^+$ and $P_0$ denotes the density with point mass at 0. This approach is analogous to Bayesian variable selection approaches for multiple regression problems. The posterior mean of the indicator $\delta_m$ has the natural interpretation as the posterior probability that component $m$ is an important component of the mixture, or the posterior ``inclusion probability'' of component $m$. Other kernel functions may be augmented in a similar way.
 
-We focus on the Gaussian kernel, which flexibly captures a wide range of underlying functional forms for $h(\cdot)$, although the methods are applicable to a broad choice of kernels. Under the previous model, we assume:
+\subsection*{Hierarchical variable selection}
 
-% TODO: paste corr(h_i, h_j) = exp(-1/rho * sum_m (a_{im} - a_{jm})^2)
+In situations where mixture components are highly correlated, the above formulation that treats components exchangeably may fail because the data may not be able to distinguish among these correlated components. Bobb et al.\cite{bobb_bkmr_2015} proposed a hierarchical variable selection approach that incorporated information on the structure of the mixture into the model.
 
-Where $\rho$ is a tuning parameter that regulates the smoothness of the dose-response function. This assumption implies that two subjects with similar exposures will have more similar risks (i.e.\ if $a_i$ is close to $a_j$, then $h_i$ will be close to $h_j$).
-
-Bobb et al.\cite{bobb_bkmr_2015} presented the Bayesian Kernel Machine Regression (BKMR) as a framework to estimate the effect of a complex mixture on a health outcome. To fit BKMR, we assume a prior on the coefficients for the confounding variables, $\beta \sim 1$ (flat prior), and $\sigma^{-2} \sim \text{Gamma}(a_\sigma, b_\sigma)$, where we set $a_\sigma = b_\sigma = 0.001$. We can parameterize BKMR by $\lambda = \tau \sigma^{-2}$, and we assume a Gamma prior distribution for the variance component of $\lambda$. For the smoothness parameter $\rho$, we assume $\rho \sim \text{Unif}(a, b)$ with $a = 0$ and $b = 100$. For additional details regarding BKMR and prior specifications, see Bobb et al.\cite{bobb_bkmr_2015}. Note that the confounding variables can be included in the $h(\cdot)$ function to allow more flexibility in the confounding adjustment.
-
-Utilizing the Bayesian model, we are able to calculate the posterior inclusion probability (PIP) of the exposure variables, which denotes the likelihood of a particular exposure being included in the model. % TODO: ADD VARIABLE SELECTION description (spike-and-slab)
+Suppose that the mixture components $a_1, \ldots, a_M$ can be partitioned into groups $S_g$ ($g = 1, \ldots, G$) such that within-group correlation is high while across-group correlation is low. Then assume that the indicator variables from the slab-and-spike prior
+\begin{align*}
+    \boldsymbol{\delta}_{S_g} \mid \omega_g &\sim \text{Multinomial}(\omega_g, \boldsymbol{\pi}_{S_g}), \quad g = 1, \ldots, G, \\
+    \omega_g &\sim \text{Bernoulli}(\pi),
+\end{align*}
+where $\boldsymbol{\delta}_{S_g} = (\delta_m)_{z_m \in S_g}$ is the vector of indicator variables and $\boldsymbol{\pi}_{S_g}$ is the corresponding vector of prior probabilities for the mixture components $z_m$ in group $S_g$. This approach allows at most a single component from a group (of highly correlated components) to enter into the model at a time.
 
 \subsection*{g-BKMR}
 
-g-BKMR is a Bayesian semi-parametric regression method that allows for (i) estimation of joint effects and interactions of time-varying environmental exposures, (ii) time-varying confounding. For the g-formula to be implemented, we must estimate $E[Y \mid A, L, C_0]$ and $f(L_t \mid \bar{A}_{t-1}, \bar{L}_{t-1}) f(C_0)$ from the observed data. This involves postulating a model for $Y$ given $A$ and $L$ and models for $L_t$ given $\bar{A}_{t-1}$ and $\bar{L}_{t-1}$. Using g-BKMR, we can estimate the causal effect for a change in exposure profile from $\mathbf{a}$ to $\mathbf{a}^*$ via the following algorithm:
+Assuming the DAG of Figure~\ref{fig:dag}, the g-formula can be calculated by equation~\eqref{eq:gformula}. For the g-formula to be implemented, we must therefore estimate $E[Y \mid \bar{A} = \bar{\mathbf{a}},\, \bar{L} = \bar{l},\, C_0 = c_0]$ and $f(l_t \mid \bar{a}_{t-1}, \bar{l}_{t-1}) f(c_0)$ from the observed data. This involves postulating a model for $Y$ given $\bar{A}$ and $\bar{L}$ and models for $L_t$ given $\bar{A}_{t-1}$ and $\bar{L}_{t-1}$.
+
+g-BKMR is a Bayesian semi-parametric regression method that allows for (i) estimation of joint effects and interactions of time-varying environmental exposures, (ii) time-varying confounding. Using g-BKMR, we estimate the causal effect for a change in exposure profile from $\mathbf{a}$ to $\mathbf{a}^*$ via the following algorithm.
 
 \begin{enumerate}
     \item Fit BKMR time-varying confounding and outcome models:
+    \begin{align}
+        L_i &= h_L(\mathbf{A}_i) + \mathbf{C}_i^\top \boldsymbol{\beta} + \epsilon_{L_i},  \label{eq:gbkmr_L} \\
+        Y_i &= h_Y(\mathbf{A}_i, \mathbf{L}_i) + \mathbf{C}_i^\top \boldsymbol{\theta} + \epsilon_{Y_i}.  \label{eq:gbkmr_Y}
+    \end{align}
 
-    % TODO: paste equations (4) and (5) from Zilan's .tex
-
-    Note that multiple time-varying confounders at multiple time-points are allowed. Each of these would be modeled under the BKMR framework and can be fitted in parallel to speed computation.
-
-    \item For each Markov chain Monte Carlo (MCMC) iteration,
-
+    \item For each Markov chain Monte Carlo (MCMC) iteration $j = 1, \ldots, J$:
     \begin{enumerate}
-        \item Generate $K$ samples of the confounder for the mean level of covariates under exposure level $\mathbf{a}$ from confounder model (4).
-        \item For each of the MCMC iterations and $K$ samples of $L$, estimate the average outcome value for the mean level of covariates for $\mathbf{a}$ from model (5).
-        \item Let the posterior sample of $Y^{\mathbf{a}}$ be the mean over the $K$ samples.
+        \item Generate $k = 1, \ldots, K$ samples of the confounder for the mean level of covariates under exposure level $\mathbf{a}^*$ from confounder model~\eqref{eq:gbkmr_L}:
+        \begin{equation*}
+        \begin{aligned}
+            L_{\mathbf{a}^*}^{(jk)}(\bar{\mathbf{c}}) &= E^{(j)}\!\left(L \mid \mathbf{A} = \mathbf{a}^*, \mathbf{C} = \bar{\mathbf{c}}\right) + \sigma_L^{(j)} N(0, 1) \\
+            &= h_L^{(j)}(\mathbf{A} = \mathbf{a}^*) + \bar{\mathbf{c}}^\top \boldsymbol{\beta}^{(j)} + \sigma_L^{(j)} N(0, 1).
+        \end{aligned}
+        \end{equation*}
+
+        \item For each of the $j = 1, \ldots, J$ iterations and $k = 1, \ldots, K$ samples of $L_{\mathbf{a}^*}$ estimate the average outcome value for the mean level of covariates for $Y_{\mathbf{a}^* L_{\mathbf{a}^*}}$ from model~\eqref{eq:gbkmr_Y}:
+        \begin{equation*}
+        \begin{aligned}
+            Y_{\mathbf{a}^* L_{\mathbf{a}^*}}^{(jk)}(\bar{\mathbf{c}}) &= E^{(j)}\!\left(Y \mid \mathbf{A} = \mathbf{a}^*, L = L_{\mathbf{a}^*}^{(jk)}(\bar{\mathbf{c}}), \mathbf{C} = \bar{\mathbf{c}}\right) \\
+            &= h_Y^{(j)}\!\left(\mathbf{A} = \mathbf{a}^*, L = L_{\mathbf{a}^*}^{(jk)}(\bar{\mathbf{c}})\right) + \bar{\mathbf{c}}^\top \boldsymbol{\theta}^{(j)}.
+        \end{aligned}
+        \end{equation*}
+
+        \item Let the $j^{\text{th}}$ posterior sample of $Y_{\mathbf{a}^* L_{\mathbf{a}^*}}$ be the mean over the $K$ samples:
+        \begin{equation*}
+            Y_{\mathbf{a}^* L_{\mathbf{a}^*}}^{(j)}(\bar{\mathbf{c}}) = \frac{1}{K} \sum_{k=1}^{K} Y_{\mathbf{a}^* L_{\mathbf{a}^*}}^{(jk)}(\bar{\mathbf{c}}) = E\!\left[Y^{\mathbf{a}^*} \mid \bar{\mathbf{c}}\right].
+        \end{equation*}
     \end{enumerate}
 
-    \item The potential outcome is then estimated as:
-    % TODO: paste estimator expression
+    \item The potential outcome $Y^{\mathbf{a}^*}$ is then estimated as:
+    \begin{equation*}
+        \frac{1}{J} \sum_{j=1}^{J} Y_{\mathbf{a}^* L_{\mathbf{a}^*}}^{(j)}(\bar{\mathbf{c}}).
+    \end{equation*}
 
-    \item The posterior sample of the ATE is obtained by:
-    % TODO: paste ATE posterior expression
+    The $j^{\text{th}}$ posterior sample of the ATE is obtained by:
+    \begin{equation*}
+        \text{ATE}^{j} = Y_{\mathbf{a}^* L_{\mathbf{a}^*}^{(j)}}(\bar{\mathbf{c}}) - Y_{\mathbf{a} L_{\mathbf{a}}^{(j)}}(\bar{\mathbf{c}}).
+    \end{equation*}
 
     \item Estimate the 95\% credible intervals from these posterior samples.
 \end{enumerate}
+
+Note that multiple time-varying confounders at multiple time-points are allowed. Each of these would be modeled under the BKMR framework and can be fitted in parallel to speed computation.
 
 The implementation of the g-BKMR algorithm discussed in this paper is publicly available on GitHub at the following link: \url{https://github.com/zc2326/causalbkmr}. In the current implementation, binary or continuous outcomes and time-varying covariates are accommodated.
