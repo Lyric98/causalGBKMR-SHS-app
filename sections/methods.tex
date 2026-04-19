@@ -101,7 +101,7 @@ BKMR allows for variable selection within a Bayesian paradigm. Define the augmen
 \begin{equation*}
     K(\mathbf{a}, \mathbf{a}'; \mathbf{r}) = \exp\!\left\{ -\sum_{m=1}^{M} r_m (a_m - a_m')^2 \right\},
 \end{equation*}
-where $\mathbf{r} = (r_1, \ldots, r_M)^\top$, and define $\mathbf{K}_{\mathbf{a}, \mathbf{r}}$ to be the $n \times n$ matrix with $(i, j)$-element equal to $K(\mathbf{a}_i, \mathbf{a}_j; \mathbf{r})$. Assuming a ``slab-and-spike'' prior on the auxiliary parameters,
+where $\mathbf{r} = (r_1, \ldots, r_M)^\top$, and define $\mathbf{K}_{\mathbf{a}, \mathbf{r}}$ to be the $n \times n$ matrix with $(i, j)$-element equal to $K(\mathbf{a}_i, \mathbf{a}_j; \mathbf{r})$. Assuming a ``spike-and-slab'' prior on the auxiliary parameters,
 \begin{align*}
     r_m \mid \delta_m &\sim \delta_m f_1(r_m) + (1 - \delta_m) P_0, \quad m = 1, \ldots, M, \\
     \delta_m &\sim \text{Bernoulli}(\pi),
@@ -112,7 +112,7 @@ where $f_1(\cdot)$ is a pdf with support on $\mathbb{R}^+$ and $P_0$ denotes the
 
 In situations where mixture components are highly correlated, the above formulation that treats components exchangeably may fail because the data may not be able to distinguish among these correlated components. Bobb et al.\cite{bobb_bkmr_2015} proposed a hierarchical variable selection approach that incorporated information on the structure of the mixture into the model.
 
-Suppose that the mixture components $a_1, \ldots, a_M$ can be partitioned into groups $S_g$ ($g = 1, \ldots, G$) such that within-group correlation is high while across-group correlation is low. Then assume that the indicator variables from the slab-and-spike prior
+Suppose that the mixture components $a_1, \ldots, a_M$ can be partitioned into groups $S_g$ ($g = 1, \ldots, G$) such that within-group correlation is high while across-group correlation is low. Then assume that the indicator variables from the spike-and-slab prior
 \begin{align*}
     \boldsymbol{\delta}_{S_g} \mid \omega_g &\sim \text{Multinomial}(\omega_g, \boldsymbol{\pi}_{S_g}), \quad g = 1, \ldots, G, \\
     \omega_g &\sim \text{Bernoulli}(\pi),
