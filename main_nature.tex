@@ -1,0 +1,114 @@
+% ============================================================================
+% g-BKMR: Causal Inference for Health Effects of Time-varying Correlated
+% Environmental Mixtures
+%
+% Full manuscript for Nature Methods, using Springer Nature LaTeX template.
+%
+% IMPORTANT: This file expects sn-jnl.cls and the sn-nature bibliography
+% style. These are NOT on CTAN. To compile:
+%   (1) In Overleaf: import the Springer Nature LaTeX template
+%       https://www.overleaf.com/latex/templates/springer-nature-latex-template/myxmhdsbzkyd
+%       Copy sn-jnl.cls and sn-nature.bst into this project.
+%   (2) Locally: download the template zip from Springer Nature and place
+%       sn-jnl.cls in the repo root (do not commit if license-restricted).
+%
+% This file stitches together the modular sections in sections/ via \input{}.
+% Each section file is plain content (no preamble), so Application.tex and
+% Supplementary.tex can reuse the same .tex sources.
+% ============================================================================
+
+\documentclass[sn-nature]{sn-jnl}
+
+% Additional packages needed by our content (tikz for DAG, subcaption for side-by-side figures)
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, bending}
+\usepackage{subcaption}
+\usepackage{graphicx}
+
+% ----- Title and authors ----------------------------------------------------
+\title[g-BKMR: Causal Inference for Time-varying Environmental Mixtures]{%
+g-BKMR: Causal Inference for Health Effects of Time-varying Correlated Environmental Mixtures%
+}
+
+\author*[1,2]{\fnm{Zilan} \sur{Chai}}\email{zc2326@columbia.edu}
+\author[1]{\fnm{Arce} \sur{Domingo-Relloso}}
+\author[1]{\fnm{Yanran} \sur{Li}}
+\author[3]{\fnm{Ana} \sur{Navas-Acien}}
+\author[4]{\fnm{Brent A.} \sur{Coull}}
+\author[1,5]{\fnm{Linda} \sur{Valeri}}
+
+\affil[1]{\orgdiv{Department of Biostatistics}, \orgname{Columbia University Mailman School of Public Health}, \city{New York}, \state{NY}, \country{USA}}
+\affil[2]{\orgname{Microsoft}, \city{Redmond}, \state{WA}, \country{USA}}
+\affil[3]{\orgdiv{Department of Environmental Health Sciences}, \orgname{Columbia University Mailman School of Public Health}, \city{New York}, \state{NY}, \country{USA}}
+\affil[4]{\orgdiv{Department of Biostatistics}, \orgname{Harvard T.H.\ Chan School of Public Health}, \city{Boston}, \state{MA}, \country{USA}}
+\affil[5]{\orgdiv{Department of Epidemiology}, \orgname{Harvard T.H.\ Chan School of Public Health}, \city{Boston}, \state{MA}, \country{USA}}
+
+% Abstract / editorial summary (Nature uses a bold first paragraph rather than structured abstract)
+\abstract{%
+\input{sections/abstract}%
+}
+
+\keywords{Bayesian kernel machine regression, causal inference, environmental mixtures, g-formula, longitudinal data, Strong Heart Study}
+
+\begin{document}
+
+\maketitle
+
+% ============================================================================
+% MAIN TEXT (IMRD-like order)
+% ============================================================================
+
+\input{sections/intro}
+
+\input{sections/methods}
+
+\input{sections/simulation}
+
+\input{sections/results_application}
+
+\input{sections/discussion}
+
+% ============================================================================
+% DECLARATIONS
+% ============================================================================
+\section*{Declarations}
+
+\subsection*{Funding}
+% TODO: Grant numbers from each author's institution.
+
+\subsection*{Availability of data and materials}
+The g-BKMR R package is publicly available on GitHub at \url{https://github.com/zc2326/causalbkmr}. Strong Heart Study data are available from the SHS Coordinating Center upon request and after approval by the participating American Indian tribes.
+
+\subsection*{Code availability}
+All code used in this manuscript is included in the package or its supplement.
+
+\subsection*{Ethics approval and consent to participate}
+The Strong Heart Study was approved by the Indian Health Service Institutional Review Board, the institutional review boards of the participating American Indian tribes, and the institutional review boards of the participating institutions. All participants provided written informed consent.
+
+\subsection*{Author contributions}
+% TODO: detailed contributions (ZC developed the original method; AD-R and YL implemented the software; YL conducted the SHS application; etc.)
+
+\subsection*{Competing interests}
+The authors declare no competing interests.
+
+\subsection*{Acknowledgements}
+% TODO: tribes, study staff, funding bodies.
+
+% ============================================================================
+% REFERENCES
+% ============================================================================
+\bibliography{references}
+
+% ============================================================================
+% SUPPLEMENTARY MATERIAL
+% ============================================================================
+\clearpage
+\appendix
+\section*{Supplementary Material}
+
+\renewcommand{\thefigure}{S\arabic{figure}}
+\setcounter{figure}{0}
+
+\input{sections/supp_figures}
+
+\end{document}
