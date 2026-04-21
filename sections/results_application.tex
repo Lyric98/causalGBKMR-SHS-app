@@ -23,7 +23,7 @@ We enabled component-wise variable selection in all BKMR models because it serve
 
 Causal effects were estimated via Monte Carlo g-computation over 40 retained posterior draws (iterations $22{,}000$--$24{,}000$, every 50th). For each draw, $K = 1{,}000$ counterfactual trajectories were simulated under two static exposure regimes: $\mathbf{a}$ (all exposures at their 25th percentile) and $\mathbf{a}^*$ (all at a target percentile $q$). Counterfactual values of $L_t$ were sampled sequentially forward in time---first $L_1$ given $A_0$, then $L_2$ given $(A_0, A_1, L_1)$---and the outcome was predicted conditional on the full counterfactual history. The average causal effect at each $q$ was computed as the posterior mean difference $E[Y^{(\mathbf{a}^*)}] - E[Y^{(\mathbf{a})}]$, with 95\% credible intervals from the 2.5th and 97.5th percentiles pooled across all five imputed datasets.
 
-We targeted two estimands: (i) the \textit{joint mixture causal effect} for $q \in \{0.30, 0.35, \ldots, 0.90\}$, yielding a causal dose-response curve, and (ii) \textit{single-variable causal effects}, shifting one metal at one visit from its 25th to 75th percentile while holding all others at their median.
+We targeted two estimands: (i) the joint mixture causal effect for $q \in \{0.30, 0.35, \ldots, 0.90\}$, yielding a causal dose-response curve, and (ii) single-variable causal effects, shifting one metal at one visit from its 25th to 75th percentile while holding all others at their median.
 
 \subsection*{Results}
 
