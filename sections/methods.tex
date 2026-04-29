@@ -12,11 +12,11 @@
 
 We consider the setting in which $n$ subjects, labelled $i = 1, \ldots, n$, enter a study at baseline (time $t = 0$) and are exposed to $A_{t,i} = A_{0,i}$. In a clinical trial, the value of $A_{0,i}$ is determined by the study protocol, usually at random. In an observational study, $A_{0,i}$ is observed and recorded. A collection of covariates, $C_{0,i}$, are also measured at baseline. At the subsequent follow-up visits, the time-varying confounders $L_{t,i}$ and treatment $A_{t,i}$ are recorded, $t = 1, \ldots, T$. An outcome $Y_i$ is observed for each subject, measured at the final visit $T$. $Y_i$ can be continuous or binary.
 
-Along with the \emph{observed outcome} $Y_i$ for each subject, for each possible realization of the treatment history $\bar{\mathbf{a}} \in \bar{\mathcal{A}}$, we also define $Y_i^{\bar{\mathbf{a}}}$, the \emph{potential outcome} that would have been observed had the subject, possibly contrary to fact, received treatment history $\bar{\mathbf{a}}$.
+Along with the \emph{observed outcome} $Y_i$ for each subject, for each possible realization of the treatment history $\bar{\mathbf{a}} \in \bar{\mathcal{A}}$, we also define $Y_{i, \bar{\mathbf{a}}}$, the \emph{potential outcome} that would have been observed had the subject, possibly contrary to fact, received treatment history $\bar{\mathbf{a}}$.
 
 In a simple setting with 3 visits, assume the DAG in Figure~\ref{fig:dag}. Under a static, fixed treatment regime, the overall causal effect of the exposures changing from the $25^{\text{th}}$ percentile to the $75^{\text{th}}$ percentile can be defined as:
 \begin{equation*}
-    \text{ACE} = E\!\left[Y^{A_0 = a_0^*,\, A_1 = a_1^*,\, A_2 = a_2^*}\right] - E\!\left[Y^{A_0 = a_0,\, A_1 = a_1,\, A_2 = a_2}\right],
+    \text{ACE} = E\!\left[Y_{A_0 = a_0^*,\, A_1 = a_1^*,\, A_2 = a_2^*}\right] - E\!\left[Y_{A_0 = a_0,\, A_1 = a_1,\, A_2 = a_2}\right],
 \end{equation*}
 where $a_0, a_1, a_2$ are the $25^{\text{th}}$ percentile of the exposures and $a_0^*, a_1^*, a_2^*$ are the $75^{\text{th}}$ percentile of the exposures.
 
@@ -24,7 +24,7 @@ where $a_0, a_1, a_2$ are the $25^{\text{th}}$ percentile of the exposures and $
 
 We are also interested in the change in the mean of the outcome for the change of the distributions of the exposures. The Average Causal Effect under a stochastic intervention is defined as
 \begin{equation*}
-    \text{ACE} = E\!\left[Y^{g^*(a_0, a_1, a_2)}\right] - E\!\left[Y^{g(a_0, a_1, a_2)}\right],
+    \text{ACE} = E\!\left[Y_{g^*(a_0, a_1, a_2)}\right] - E\!\left[Y_{g(a_0, a_1, a_2)}\right],
 \end{equation*}
 where $g$ and $g^*$ are two distributions of the exposures.
 
@@ -32,9 +32,9 @@ In addition to estimating the effect of the metal mixture changing from the $25^
 
 \subsection*{g-formula}
 
-The basic idea of the g-formula is standardization, a common approach to estimating the expected value of $Y^{\bar{\mathbf{a}}}$ in the population.\cite{naimi_2017} It can be illustrated in a simple time-fixed confounding example with baseline confounders $C_0$ where the change in the observed mean of the outcome under two different exposure levels is standardized over the observed values $c_0$ of $C_0$:
+The basic idea of the g-formula is standardization, a common approach to estimating the expected value of $Y_{\bar{\mathbf{a}}}$ in the population.\cite{naimi_2017} It can be illustrated in a simple time-fixed confounding example with baseline confounders $C_0$ where the change in the observed mean of the outcome under two different exposure levels is standardized over the observed values $c_0$ of $C_0$:
 \begin{equation*}
-    E\!\left(Y^{\bar{\mathbf{a}}}\right) = \sum_{C_0} E\!\left(Y \mid \bar{A} = \bar{\mathbf{a}},\, C_0 = c_0\right) P(C_0 = c_0),
+    E\!\left(Y_{\bar{\mathbf{a}}}\right) = \sum_{C_0} E\!\left(Y \mid \bar{A} = \bar{\mathbf{a}},\, C_0 = c_0\right) P(C_0 = c_0),
 \end{equation*}
 where the sum is over all possible values $c_0$ of $C_0$. The g-formula is a valid estimator for the average causal effect under several identification assumptions.
 
@@ -42,14 +42,14 @@ Using the DAG in Figure~\ref{fig:dag}, we now give three identifying assumptions
 
 \paragraph{1. Consistency:}
 \begin{equation*}
-    E[Y \mid A_0 = a_0, A_1 = a_1, A_2 = a_2] = E\!\left[Y^{a_0, a_1, a_2} \,\middle|\, A_0 = a_0, A_1 = a_1, A_2 = a_2\right].
+    E[Y \mid A_0 = a_0, A_1 = a_1, A_2 = a_2] = E\!\left[Y_{a_0, a_1, a_2} \,\middle|\, A_0 = a_0, A_1 = a_1, A_2 = a_2\right].
 \end{equation*}
 
 \paragraph{2. Exchangeability:}
 \begin{align*}
-    Y^{a_0, a_1, a_2} &\independent A_0 \mid C_0, \\
-    Y^{a_0, a_1, a_2} &\independent A_1 \mid C_0, A_0, L_1, \\
-    Y^{a_0, a_1, a_2} &\independent A_2 \mid C_0, A_0, L_1, A_1, L_2.
+    Y_{a_0, a_1, a_2} &\independent A_0 \mid C_0, \\
+    Y_{a_0, a_1, a_2} &\independent A_1 \mid C_0, A_0, L_1, \\
+    Y_{a_0, a_1, a_2} &\independent A_2 \mid C_0, A_0, L_1, A_1, L_2.
 \end{align*}
 
 \paragraph{3. Positivity:}
@@ -59,7 +59,7 @@ Using the DAG in Figure~\ref{fig:dag}, we now give three identifying assumptions
 
 The general expression of the g-formula for a static fixed intervention when the identifiability assumptions hold is:
 \begin{equation}
-    E\!\left[Y^{\bar{\mathbf{a}}}\right] = \sum_{\bar{l}} E\!\left(Y \mid \bar{A} = \bar{\mathbf{a}},\, \bar{L} = \bar{l},\, C_0 = c_0\right) \prod_{t=0}^{T} f\!\left(l_t \mid \bar{a}_{t-1}, \bar{l}_{t-1}\right) f(c_0).
+    E\!\left[Y_{\bar{\mathbf{a}}}\right] = \sum_{\bar{l}} E\!\left(Y \mid \bar{A} = \bar{\mathbf{a}},\, \bar{L} = \bar{l},\, C_0 = c_0\right) \prod_{t=0}^{T} f\!\left(l_t \mid \bar{a}_{t-1}, \bar{l}_{t-1}\right) f(c_0).
     \label{eq:gformula}
 \end{equation}
 
@@ -119,11 +119,11 @@ Suppose that the mixture components $a_1, \ldots, a_M$ can be partitioned into g
 \end{align*}
 where $\boldsymbol{\delta}_{S_g} = (\delta_m)_{z_m \in S_g}$ is the vector of indicator variables and $\boldsymbol{\pi}_{S_g}$ is the corresponding vector of prior probabilities for the mixture components $z_m$ in group $S_g$. This approach allows at most a single component from a group (of highly correlated components) to enter into the model at a time.
 
-\subsection*{g-BKMR}
+\subsection*{CausalBKMR}
 
 Assuming the DAG of Figure~\ref{fig:dag}, the g-formula can be calculated by equation~\eqref{eq:gformula}. For the g-formula to be implemented, we must therefore estimate $E[Y \mid \bar{A} = \bar{\mathbf{a}},\, \bar{L} = \bar{l},\, C_0 = c_0]$ and $f(l_t \mid \bar{a}_{t-1}, \bar{l}_{t-1}) f(c_0)$ from the observed data. This involves postulating a model for $Y$ given $\bar{A}$ and $\bar{L}$ and models for $L_t$ given $\bar{A}_{t-1}$ and $\bar{L}_{t-1}$.
 
-g-BKMR is a Bayesian semi-parametric regression method that allows for (i) estimation of joint effects and interactions of time-varying environmental exposures, (ii) time-varying confounding. Using g-BKMR, we estimate the causal effect for a change in exposure profile from $\mathbf{a}$ to $\mathbf{a}^*$ via the following algorithm.
+CausalBKMR is a Bayesian semi-parametric regression method that allows for (i) estimation of joint effects and interactions of time-varying environmental exposures, (ii) time-varying confounding. Using CausalBKMR, we estimate the causal effect for a change in exposure profile from $\mathbf{a}$ to $\mathbf{a}^*$ via the following algorithm.
 
 \begin{enumerate}
     \item Fit BKMR time-varying confounding and outcome models:
@@ -152,11 +152,11 @@ g-BKMR is a Bayesian semi-parametric regression method that allows for (i) estim
 
         \item Let the $j^{\text{th}}$ posterior sample of $Y_{\mathbf{a}^* L_{\mathbf{a}^*}}$ be the mean over the $K$ samples:
         \begin{equation*}
-            Y_{\mathbf{a}^* L_{\mathbf{a}^*}}^{(j)}(\bar{\mathbf{c}}) = \frac{1}{K} \sum_{k=1}^{K} Y_{\mathbf{a}^* L_{\mathbf{a}^*}}^{(jk)}(\bar{\mathbf{c}}) = E\!\left[Y^{\mathbf{a}^*} \mid \bar{\mathbf{c}}\right].
+            Y_{\mathbf{a}^* L_{\mathbf{a}^*}}^{(j)}(\bar{\mathbf{c}}) = \frac{1}{K} \sum_{k=1}^{K} Y_{\mathbf{a}^* L_{\mathbf{a}^*}}^{(jk)}(\bar{\mathbf{c}}) = E\!\left[Y_{\mathbf{a}^*} \mid \bar{\mathbf{c}}\right].
         \end{equation*}
     \end{enumerate}
 
-    \item The potential outcome $Y^{\mathbf{a}^*}$ is then estimated as:
+    \item The potential outcome $Y_{\mathbf{a}^*}$ is then estimated as:
     \begin{equation*}
         \frac{1}{J} \sum_{j=1}^{J} Y_{\mathbf{a}^* L_{\mathbf{a}^*}}^{(j)}(\bar{\mathbf{c}}).
     \end{equation*}
@@ -171,4 +171,4 @@ g-BKMR is a Bayesian semi-parametric regression method that allows for (i) estim
 
 Note that multiple time-varying confounders at multiple time-points are allowed. Each of these would be modeled under the BKMR framework and can be fitted in parallel to speed computation.
 
-The implementation of the g-BKMR algorithm discussed in this paper is publicly available on GitHub at the following link: \url{https://github.com/zc2326/causalbkmr}. In the current implementation, binary or continuous outcomes and time-varying covariates are accommodated.
+The implementation of the CausalBKMR algorithm discussed in this paper is publicly available on GitHub at the following link: \url{https://github.com/zc2326/causalbkmr}. In the current implementation, binary or continuous outcomes and time-varying covariates are accommodated.
